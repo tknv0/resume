@@ -1,0 +1,298 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiru Vijayan - Performance Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        nav {
+            background: #34495e;
+            padding: 1rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #3498db;
+        }
+
+        section {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #about {
+            background: #f7f7f7;
+        }
+
+        #about img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        #skills, #achievements, #education {
+            background: white;
+        }
+
+        .skills-grid, .achievements-grid, .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card, .achievement-card, .project-card {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .skill-card:hover, .achievement-card:hover, .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .skill-card h3, .achievement-card h3, .project-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        #contact {
+            background: #f7f7f7;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Thirunarayan Vijayan</h1>
+        <p>Performance Engineer | Application Performance Monitoring | System Optimization</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#achievements">Achievements</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <img src="https://via.placeholder.com/150" alt="Thiru Vijayan">
+        <p>I am a Performance Engineer with 20 years of experience in application and infrastructure performance engineering, testing, and system administration. I specialize in Application Performance Monitoring, Capacity Planning, Workload Modeling, and Test Strategy Design. I have led performance testing for enterprise applications across Government, Energy, Banking, Retail, Insurance, and Transport sectors, delivering optimized solutions with tools like LoadRunner, JMeter, and AppDynamics.</p>
+    </section>
+
+    <section id="skills">
+        <h2>Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>Testing Tools</h3>
+                <p>Apache JMeter, LoadRunner, Performance Center, NeoLoad, Postman, SoapUI, Perfecto</p>
+            </div>
+            <div class="skill-card">
+                <h3>Performance Monitoring</h3>
+                <p>Data Dog, Dynatrace, Micro Focus SiteScope, Grafana, Prometheus, Nmon</p>
+            </div>
+            <div class="skill-card">
+                <h3>Scripting Protocols</h3>
+                <p>Web (HTTP/HTML), Web-services, TruClient-Web, PeopleSoft Enterprise, Oracle NCA, Citrix, RTE, Winsock, ODBC, Java-Vuser, Siebel-Web, COM/DCOM</p>
+            </div>
+            <div class="skill-card">
+                <h3>Programming</h3>
+                <p>LoadRunner VuGen, C, Visual C++, Python, Groovy, Java (intermediate)</p>
+            </div>
+            <div class="skill-card">
+                <h3>CI/CD & Version Control</h3>
+                <p>Jenkins, GitHub, Bitbucket</p>
+            </div>
+            <div class="skill-card">
+                <h3>Profiling & Analysis</h3>
+                <p>VisualVM, JProf, Visual Studio Performance Profiler, Jconsole, AWS X-Ray, LogDNA, Kibana</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>Key Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3>Ontario Ministry of Government Services</h3>
+                <p>Led performance engineering for enterprise applications, designing workload models and test scripts using LoadRunner and JMeter. Configured CI/CD pipelines with Jenkins and monitored JVM metrics with VisualVM and Dynatrace.</p>
+            </div>
+            <div class="project-card">
+                <h3>Suncor Energy - Petro-Canada App</h3>
+                <p>Performance tested mobile REST and XML APIs using JMeter, improving app ratings from 2.6 to 4.5 (iOS) and 2.3 to 4.0 (Google Play). Set up load test environments with NodeJS, Nginx, InfluxDB, and Grafana.</p>
+            </div>
+            <div class="project-card">
+                <h3>Metrolinx - AppDynamics & PRESTO Mobile</h3>
+                <p>Deployed AppDynamics for monitoring >50 nodes, designed LoadRunner and NeoLoad scripts for PRESTO Mobile FMS, and migrated performance testing to Azure Hybrid cloud with CI/CD automation.</p>
+            </div>
+            <div class="project-card">
+                <h3>CIBC - Online Banking & ECCO-DSIL</h3>
+                <p>Developed LoadRunner scripts for REST API testing, converted JKS certificates to PEM format, and monitored WebLogic metrics with Dynatrace to optimize performance for online banking platforms.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="achievements">
+        <h2>Achievements</h2>
+        <div class="achievements-grid">
+            <div class="achievement-card">
+                <h3>Tesco Values Award (2011)</h3>
+                <p>Received for successful completion of PeopleSoft HRMS performance testing at Tesco HSC.</p>
+            </div>
+            <div class="achievement-card">
+                <h3>Extra Miler Award (2008)</h3>
+                <p>Awarded for completing the ISMS (ISO 27001-2005) audit in the primary cycle at Maveric Systems.</p>
+            </div>
+            <div class="achievement-card">
+                <h3>Service Selection Board (2004)</h3>
+                <p>Achieved 82nd All India Rank in the Combined Defence Service Examination.</p>
+            </div>
+            <div class="achievement-card">
+                <h3>HP Certified Professional (2008)</h3>
+                <p>Certified in HP Virtual User Generator Software (Candidate ID: SR5272308).</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <h2>Education</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>Master of Engineering - Quality Systems Engineering</h3>
+                <p>Concordia University, Montreal, Canada (Sep 2014 – Apr 2016)</p>
+            </div>
+            <div class="skill-card">
+                <h3>Master of Science - Software Engineering</h3>
+                <p>Periyar University, Salem, India (Jun 1999 – Apr 2004)</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <p>Email: <a href="mailto:thiruknv@gmail.com">thiruknv@gmail.com</a></p>
+        <p>Phone: (514) 961-8050</p>
+        <p>LinkedIn: <a href="https://ca.linkedin.com/in/thiruknv">ca.linkedin.com/in/thiruknv</a></p>
+        <p>GitHub: <a href="https://github.com/tvijayan">github.com/tvijayan</a></p>
+    </section>
+
+    <footer>
+        <p>© 2025 Thirunarayan Vijayan. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = document.querySelector(this.getAttribute('href'));
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
